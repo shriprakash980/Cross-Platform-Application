@@ -2,6 +2,10 @@
 
 A secure internal portal for HB+ ([hbplus.fit](https://hbplus.fit)) built with Expo, React Native, and React Native for Web with domain-restricted Google OAuth 2.0 authentication and Cloud Firestore role-based access control.
 
+### 🌐 Live Deployment
+- **Production URL**: [https://shriprakash980.github.io/Cross-Platform-Application/](https://shriprakash980.github.io/Cross-Platform-Application/)
+- **Repository**: [https://github.com/shriprakash980/Cross-Platform-Application](https://github.com/shriprakash980/Cross-Platform-Application)
+
 ---
 
 ## A. Setup Instructions
