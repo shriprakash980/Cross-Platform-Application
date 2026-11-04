@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // HB+ AEGIS PERIMETER SECURITY RULES
+    // =========================================================================
+    // Client-side checks are for user experience; these server-side rules are
+    // the cryptographic source of truth for authorization.
+    // Every read/write strictly enforces:
+    // 1. request.auth != null (Authenticated)
+    // 2. request.auth.token.email_verified == true (Verified Identity)
+    // 3. request.auth.token.email.matches('.*@hbplus\\.fit$') (Allowed Domain)
+    // =========================================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isAllowedDomain() {
+      return request.auth.token.email.matches('.*@hbplus\\.fit$');
+    }
+
+    function isValidAegisUser() {
+      return isAuthenticated() && isEmailVerified() && isAllowedDomain();
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isValidAegisUser() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /users/{userId} {
+      // READ: Users can read their own profile; only admins can list all users
+      allow get: if isValidAegisUser() && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+
+      // CREATE: On first valid login, users can create their own doc with role "user"
+      // Users are strictly forbidden from setting their role to "admin"
+      allow create: if isValidAegisUser() &&
+        isOwner(userId) &&
+        request.resource.data.role == 'user' &&
+        request.resource.data.uid == userId &&
+        request.resource.data.email == request.auth.token.email;
+
+      // UPDATE:
+      // 1. Self-update: can update lastLoginAt, name, photoURL, but CANNOT change role or createdAt
+      // 2. Admin update: administrators have authority to promote/demote user roles
+      allow update: if isValidAegisUser() && (
+        (isOwner(userId) &&
+         request.resource.data.role == resource.data.role &&
+         request.resource.data.createdAt == resource.data.createdAt) ||
+        isAdmin()
+      );
+
+      // DELETE: Restricted to Admins only
+      allow delete: if isAdmin();
+    }
+  }
+}

@@ -1,18 +1,20 @@
 {
   "expo": {
-    "name": "temp-app",
-    "slug": "temp-app",
+    "name": "HB+ Aegis",
+    "slug": "hbplus-aegis",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "tempapp",
-    "userInterfaceStyle": "automatic",
+    "scheme": "hbplusaegis",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0A0E1A",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0A0E1A",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -20,23 +22,23 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "server",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static",
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0A0E1A",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": true
     }
   }
 }
