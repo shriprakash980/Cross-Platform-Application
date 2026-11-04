@@ -1,0 +1,1 @@
+__d(function(g,r,i,a,m,e,d){"use strict";Object.defineProperty(e,'__esModule',{value:!0}),Object.defineProperty(e,"default",{enumerable:!0,get:function(){return c}});var t=r(d[0]),u=r(d[1]),n=r(d[2]);function c(){const{user:c}=(0,u.useAuth)();return c?(0,n.jsx)(t.Redirect,{href:"/(app)/dashboard"}):(0,n.jsx)(t.Redirect,{href:"/(auth)/login"})}},1374,[85,791,2]);
